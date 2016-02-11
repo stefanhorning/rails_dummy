@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+# Elasticsearch config for testing
+
+defaults: &defaults
+  hosts:      '{{ dummy_elasticsearch_host }}'
+  index_name: '{{ dummy_elasticsearch_index }}'
+  log:        false
+  max_tries:  3
+  protocol:   http
+  randomize_hosts:    false
+  reload_after:       10_000
+  reload_connections: false
+  reload_on_failure:  false
+  resurrect_after:    60
+  retry_on_failure:   false
+  sniffer_timeout:    false
+  transport_options:
+    request:
+      timeout:      5
+      open_timeout: 5
+
+consumer:
+  <<: *defaults
+
+development:
+  <<: *defaults
+  log: true
+
+production:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  index_name: dummy-app-test
+  # Important to make travis builds pass without timeouts:
+  transport_options:
+    request:
+      timeout:      12
+      open_timeout: 12
