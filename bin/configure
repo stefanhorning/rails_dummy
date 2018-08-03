@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+# Configures dummy app for development
+# Using templates from config/samples/
+
+# Variables that work for development:
+CONFIG_VARS = {
+  'ansible_managed'             => 'File created by bin/configure',
+  # database.yml
+  # no placeholders
+}
+
+CONFIG_VARS.merge!(DOCKER_CONFIG)
+
+project_root = File.expand_path("../../", __FILE__)
+
+Dir.glob("#{project_root}/config/samples/*.{yml,rb}").each do |file_path|
+  file_name = file_path.split('/').last
+  if ARGV[0] == 'clean' || !File.exists?("#{project_root}/config/#{file_name}")
+    puts "== Creating #{file_name} =="
+    template = File.read(file_path)
+    config = template.gsub(/{{(.+)}}/){ CONFIG_VARS.fetch($1.strip) }
+    File.write("#{project_root}/config/#{file_name}", config)
+  end
+end
