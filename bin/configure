@@ -8,6 +8,11 @@ CONFIG_VARS = {
   'ansible_managed'             => 'File created by bin/configure',
   # database.yml
   # no placeholders
+  # secrets.yml
+  # no placeholders
+  # elasticsearch.yml
+  'dummy_elasticsearch_host'  => 'localhost',
+  'dummy_elasticsearch_index' => 'my-index'
 }
 
 project_root = File.expand_path("../../", __FILE__)
