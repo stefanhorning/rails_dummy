@@ -1,0 +1,14 @@
+sudo: required
+dist: trusty
+
+language: ruby
+cache:
+  bundler: true
+addons:
+  postgresql: 9.6
+
+before_script:
+  - bin/configure
+  - bundle exec rake db:create
+
+
