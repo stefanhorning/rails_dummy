@@ -10,8 +10,6 @@ CONFIG_VARS = {
   # no placeholders
 }
 
-CONFIG_VARS.merge!(DOCKER_CONFIG)
-
 project_root = File.expand_path("../../", __FILE__)
 
 Dir.glob("#{project_root}/config/samples/*.{yml,rb}").each do |file_path|
