@@ -59,7 +59,7 @@ test:
   <<: *default
   database: rails_dummy_test
   username: postgres
-  passwort: postgres
+  password: postgres
   host: 127.0.0.1
   port: 5432
 
