@@ -1,0 +1,53 @@
+# Github action description file for Testing Rails apps
+
+name: Rails tests
+on: [push, pull_request]
+
+jobs:
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-latest
+    services:
+      # Docker services, use images from Docker hub
+      # Using dockers health-check to wait for services to start,
+      # see https://ryaneschinger.com/blog/using-docker-native-health-checks/
+      postgres:
+        image: postgres:12.5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 2s
+          --health-retries 15
+    env:
+      RAILS_ENV: test
+    steps:
+
+      - name: Checkout code from git
+        uses: actions/checkout@v2
+
+      - name: Install postgres client lib
+        run: sudo apt-get install libpq-dev
+
+      - name: Setup Ruby and bundle
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          # takes version from .ruby-versions file
+
+      - name: Run Configure
+        run: |
+          bin/configure
+          cat config/database.yml
+
+      - name: Create Test DB and runs migration for schema
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+
+      - name: Run Rspec tests
+        run: bundle exec rspec --force-color
