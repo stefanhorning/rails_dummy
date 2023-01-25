@@ -19,7 +19,7 @@ project_root = File.expand_path("../../", __FILE__)
 
 Dir.glob("#{project_root}/config/samples/*.{yml,rb}").each do |file_path|
   file_name = file_path.split('/').last
-  if ARGV[0] == 'clean' || !File.exists?("#{project_root}/config/#{file_name}")
+  if ARGV[0] == 'clean' || !File.exist?("#{project_root}/config/#{file_name}")
     puts "== Creating #{file_name} =="
     template = File.read(file_path)
     config = template.gsub(/{{(.+)}}/){ CONFIG_VARS.fetch($1.strip) }
